@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place an Order - EasyCall BD</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+        background-color: #1a1d21;
+        color: #ffffff;
+        line-height: 1.6;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    header {
+        background-color: #13151a;
+        padding: 20px 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+    
+    .logo h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+    
+    .logo span {
+        color: #b4e04b;
+    }
+    
+    .nav-links {
+        display: flex;
+        list-style: none;
+    }
+    
+    .nav-links li {
+        margin-left: 30px;
+    }
+    
+    .nav-links a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+        color: #b4e04b;
+    }
+    
+    .mobile-menu {
+        display: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    .order-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 30px;
+        background-color: #1a1d21;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .order-title {
+        font-size: 2.5rem;
+        color: #b4e04b;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .order-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        color: #ffffff;
+    }
+    
+    .form-group label i {
+        color: #b4e04b;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        background-color: #13151a;
+        border: 1px solid #2c2f36;
+        border-radius: 6px;
+        color: #ffffff;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #b4e04b;
+    }
+    
+    .form-control::placeholder {
+        color: #6c757d;
+    }
+    
+    .form-control.invalid {
+        border-color: #dc3545;
+    }
+    
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        padding-right: 40px;
+    }
+    
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+    
+    .btn-order {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #b4e04b;
+        color: #1a1d21;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-order:hover {
+        background-color: #9bc740;
+    }
+    
+    .btn-prev {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #2c2f36;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-prev:hover {
+        background-color: #3a3f48;
+    }
+    
+    .loading-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        color: white;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #b4e04b;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    .order-success {
+        text-align: center;
+        padding: 40px;
+        background-color: #1a1d21;
+        border-radius: 8px;
+        display: none;
+    }
+    
+    .success-icon {
+        font-size: 5rem;
+        color: #b4e04b;
+        margin-bottom: 20px;
+    }
+    
+    .order-success h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: #ffffff;
+    }
+    
+    .order-success p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        color: #adb5bd;
+    }
+    
+    .btn-home {
+        display: inline-block;
+        padding: 12px 25px;
+        background-color: #b4e04b;
+        color: #1a1d21;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-home:hover {
+        background-color: #9bc740;
+    }
+    
+    footer {
+        background-color: #13151a;
+        padding: 60px 0 20px;
+        margin-top: 60px;
+    }
+    
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+    
+    .footer-column h3 {
+        color: #b4e04b;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        position: relative;
+    }
+    
+    .footer-column p {
+        color: #adb5bd;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+    
+    .footer-logo h2 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        color: #ffffff;
+    }
+    
+    .footer-logo span {
+        color: #b4e04b;
+    }
+    
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #2c2f36;
+        color: #ffffff;
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
+    
+    .social-links a:hover {
+        background-color: #b4e04b;
+        color: #13151a;
+    }
+    
+    .footer-links, .contact-info {
+        list-style: none;
+    }
+    
+    .footer-links li, .contact-info li {
+        margin-bottom: 12px;
+    }
+    
+    .footer-links a {
+        color: #adb5bd;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+        color: #b4e04b;
+    }
+    
+    .contact-info li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #adb5bd;
+    }
+    
+    .contact-info i {
+        color: #b4e04b;
+        width: 20px;
+    }
+    
+    .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+        border-top: 1px solid #2c2f36;
+    }
+    
+    .footer-bottom p {
+        color: #adb5bd;
+    }
+    
+    .footer-bottom-links {
+        display: flex;
+        list-style: none;
+    }
+    
+    .footer-bottom-links li {
+        margin-left: 20px;
+    }
+    
+    .footer-bottom-links a {
+        color: #adb5bd;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .footer-bottom-links a:hover {
+        color: #b4e04b;
+    }
+    
+    .scroll-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background-color: #b4e04b;
+        color: #13151a;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+        z-index: 99;
+    }
+    
+    .scroll-to-top.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Progress indicator */
+    .progress-container {
+        margin-bottom: 30px;
+    }
+    
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-bottom: 30px;
+    }
+    
+    .progress-steps::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: 4px;
+        width: 100%;
+        background-color: #2c2f36;
+        z-index: 0;
+    }
+    
+    .progress-step {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #2c2f36;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .progress-step.active {
+        background-color: #b4e04b;
+        color: #13151a;
+    }
+    
+    .progress-step.completed {
+        background-color: #b4e04b;
+        color: #13151a;
+    }
+    
+    .progress-step-text {
+        position: absolute;
+        top: 45px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #adb5bd;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+    
+    .progress-step.active .progress-step-text,
+    .progress-step.completed .progress-step-text {
+        color: #b4e04b;
+    }
+    
+    .progress-line {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 4px;
+        background-color: #b4e04b;
+        z-index: 0;
+        transition: width 0.3s ease;
+    }
+    
+    /* Form step styles */
+    .form-step {
+        display: none;
+    }
+    
+    .form-step.active {
+        display: block;
+    }
+    
+    .form-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        grid-column: span 2;
+    }
+    
+    .form-navigation .btn-order,
+    .form-navigation .btn-prev {
+        width: 48%;
+    }
+    
+    /* Mobile styles */
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background-color: #13151a;
+            flex-direction: column;
+            padding: 20px;
+            z-index: 100;
+        }
+        
+        .nav-links.active {
+            display: flex;
+        }
+        
+        .nav-links li {
+            margin: 10px 0;
+        }
+        
+        .mobile-menu {
+            display: block;
+        }
+        
+        .order-container {
+            margin: 20px;
+            padding: 20px;
+        }
+        
+        .order-title {
+            font-size: 2rem;
+        }
+        
+        .order-form {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            font-size: 1rem;
+        }
+        
+        .form-control {
+            padding: 10px;
+        }
+        
+        .btn-order, .btn-prev {
+            font-size: 1rem;
+            padding: 12px;
+        }
+        
+        .footer-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .footer-bottom-links {
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .footer-bottom-links li {
+            margin: 0 10px;
+        }
+        
+        .form-navigation {
+            grid-column: span 1;
+        }
+        
+        .progress-steps {
+            margin-bottom: 40px;
+        }
+        
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            font-size: 0.8rem;
+        }
+        
+        .progress-step-text {
+            display: none;
+        }
+    }
+</style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <a href="index.html">
+                <h1>EasyCall<span>BD</span></h1>
+            </a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="order-container">
+    <h1 class="order-title">Order Now</h1>
+    
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="progress-step active" data-step="1">
+                1
+                <span class="progress-step-text">File</span>
+            </div>
+            <div class="progress-step" data-step="2">
+                2
+                <span class="progress-step-text">Details</span>
+            </div>
+            <div class="progress-step" data-step="3">
+                3
+                <span class="progress-step-text">Location</span>
+            </div>
+            <div class="progress-step" data-step="4">
+                4
+                <span class="progress-step-text">Contact</span>
+            </div>
+            <div class="progress-line" style="width: 0%;"></div>
+        </div>
+    </div>
+    
+    <form id="orderForm" class="order-form">
+        <!-- Step 1 -->
+        <div class="form-step active" data-step="1">
+            <div class="form-group" style="grid-column: span 2;">
+                <label><i class="fas fa-folder"></i> Drive Folder / PDF URL</label>
+                <input type="text" class="form-control" id="driveUrl" name="driveUrl" placeholder="Drive Folder / PDF URL" required>
+                <small style="color: #adb5bd; margin-top: 5px; display: block;">Please provide a Google Drive link or PDF URL</small>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="btn-prev" style="visibility:hidden;">Back</button>
+                <button type="button" class="btn-order btn-next">Next</button>
+            </div>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="form-step" data-step="2">
+            <div class="form-group">
+                <label><i class="fas fa-file-alt"></i> How many pages?</label>
+                <input type="number" class="form-control" id="pageCount" name="pageCount" placeholder="Page Number" min="1" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-print"></i> Print Type</label>
+                <select class="form-control" id="printType" name="printType" required>
+                    <option value="" disabled selected>Select Print Type</option>
+                    <option value="black_white">Black & White (1.3 Tk)</option>
+                    <option value="color">Color (1.5 Tk)</option>
+                </select>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="btn-prev">Back</button>
+                <button type="button" class="btn-order btn-next">Next</button>
+            </div>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="form-step" data-step="3">
+            <div class="form-group">
+                <label><i class="fas fa-map-marker-alt"></i> Division</label>
+                <select class="form-control" id="district" name="district" required>
+                    <option value="" disabled selected>Select Division</option>
+                    <option value="dhaka">Dhaka</option>
+                    <option value="chittagong">Chittagong</option>
+                    <option value="rajshahi">Rajshahi</option>
+                    <option value="khulna">Khulna</option>
+                    <option value="barishal">Barishal</option>
+                    <option value="sylhet">Sylhet</option>
+                    <option value="rangpur">Rangpur</option>
+                    <option value="mymensingh">Mymensingh</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-map"></i> Area</label>
+                <select class="form-control" id="area" name="area" required>
+                    <option value="" disabled selected>Select Area</option>
+                    <!-- Areas will be populated based on selected district -->
+                </select>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label><i class="fas fa-home"></i> Detailed Address</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="Detailed Address" required>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="btn-prev">Back</button>
+                <button type="button" class="btn-order btn-next">Next</button>
+            </div>
+        </div>
+        
+        <!-- Step 4 -->
+        <div class="form-step" data-step="4">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Your Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label><i class="fas fa-sticky-note"></i> Additional Notes</label>
+                <textarea class="form-control" id="notes" name="notes" placeholder="Any special instructions or requirements (optional)"></textarea>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="btn-prev">Back</button>
+                <button type="submit" class="btn-order">Place Order</button>
+            </div>
+        </div>
+    </form>
+    
+    <div id="orderSuccess" class="order-success">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Thank you for your order. We will contact you shortly to confirm the details.</p>
+        <p>Your order has been sent to our system and our team will process it soon.</p>
+        <a href="index.html" class="btn-home">Back to Home</a>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <div class="footer-logo">
+                    <h2>EasyCall<span>BD</span></h2>
+                </div>
+                <p>Low cost printing services for businesses and individuals. Quality, reliability, and customer satisfaction guaranteed.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="portfolio.html">Portfolio</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Services</h3>
+                <ul class="footer-links">
+                    <li><a href="services.html#business-documents">Business Documents</a></li>
+                    <li><a href="services.html#marketing-materials">Marketing Materials</a></li>
+                    <li><a href="services.html#books-catalogs">Books & Catalogs</a></li>
+                    <li><a href="services.html#custom-merchandise">Custom Merchandise</a></li>
+                    <li><a href="services.html#large-format">Large Format Printing</a></li>
+                    <li><a href="services.html#design-services">Design Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Nilkhet, Dhaka</li>
+                    <li><i class="fas fa-phone"></i> 01586033732</li>
+                    <li><i class="fas fa-envelope"></i> easycallbd2025@gmail.com</li>
+                    <li><i class="fas fa-clock"></i> Sat-Fri</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EasyCall BD. All Rights Reserved.</p>
+            <ul class="footer-bottom-links">
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<div class="scroll-to-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<!-- Firebase Scripts -->
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDuY1EhiKneD7P-6wS7nDdcI1tai0iY_aM",
+        authDomain: "easycall-bd.firebaseapp.com",
+        projectId: "easycall-bd",
+        storageBucket: "easycall-bd.firebasestorage.app",
+        messagingSenderId: "118716206171",
+        appId: "1:118716206171:web:ff4415627abf6ca2e8837e",
+        measurementId: "G-MP1LWS3WJY"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
+
+    // Areas by district
+    const areasByDistrict = {
+        dhaka: [
+            "Mirpur", "Dhanmondi", "Gulshan", "Banani", "Uttara", "Mohammadpur", "Motijheel",
+            "Tongi", "Savar", "Khilgaon", "Keraniganj", "Demra", "Tejgaon", "Narayanganj", "Narsingdi",
+            "Manikganj", "Munshiganj", "Gazipur", "Faridpur", "Tangail", "Madaripur", "Shariatpur", "Rajbari", "Gopalganj"
+        ],
+        chittagong: [
+            "Agrabad", "Nasirabad", "Halishahar", "Patenga", "Kotwali",
+            "Panchlaish", "Khulshi", "Cox's Bazar", "Teknaf", "Bandarban", "Rangamati", "Noakhali",
+            "Feni", "Comilla", "Brahmanbaria", "Chandpur", "Khagrachhari", "Lakshmipur"
+        ],
+        rajshahi: [
+            "Boalia", "Rajpara", "Motihar", "Shahmokhdum",
+            "Puthia", "Tanore", "Natore", "Naogaon", "Joypurhat", "Chapai Nawabganj", "Bogra", "Pabna", "Sirajganj"
+        ],
+        khulna: [
+            "Sonadanga", "Khalishpur", "Daulatpur", "Boyra",
+            "Jessore", "Satkhira", "Bagerhat", "Magura", "Meherpur", "Narail", "Chuadanga", "Jhenaidah", "Kushtia"
+        ],
+        barishal: [
+            "Kotwali", "Rupatoli", "Amanatganj", "Kashipur",
+            "Babuganj", "Banaripara", "Patuakhali", "Bhola", "Jhalokathi", "Barguna", "Pirojpur"
+        ],
+        sylhet: [
+            "Bondor", "Shahporan", "Ambarkhana", "Zindabazar",
+            "Beanibazar", "Golapganj", "Sreemangal", "Kulaura", "Sunamganj", "Habiganj", "Moulvibazar"
+        ],
+        rangpur: [
+            "Kotwali", "Tajhat", "Dhap", "Bodorganj",
+            "Dinajpur", "Thakurgaon", "Nilphamari", "Kurigram", "Lalmonirhat", "Panchagarh", "Gaibandha"
+        ],
+        mymensingh: [
+            "Kotwali", "Chorpara", "Baghmara", "Mashkanda",
+            "Trishal", "Gafargaon", "Gouripur", "Netrokona", "Jamalpur", "Sherpur", "Muktagachha"
+        ]
+    };
+  
+    // Populate areas based on selected district
+    const districtSelect = document.getElementById('district');
+    const areaSelect = document.getElementById('area');
+
+    if (districtSelect && areaSelect) {
+        districtSelect.addEventListener('change', function() {
+            const selectedDistrict = this.value;
+            
+            // Clear existing options
+            areaSelect.innerHTML = '<option value="" disabled selected>Select Area</option>';
+            
+            // Add new options based on selected district
+            if (selectedDistrict && areasByDistrict[selectedDistrict]) {
+                areasByDistrict[selectedDistrict].forEach(area => {
+                    const option = document.createElement('option');
+                    option.value = area.toLowerCase().replace(/\s+/g, '_');
+                    option.textContent = area;
+                    areaSelect.appendChild(option);
+                });
+            }
+        });
+    }
+
+    // Form steps navigation
+    const steps = Array.from(document.querySelectorAll('.form-step'));
+    const progressSteps = Array.from(document.querySelectorAll('.progress-step'));
+    const progressLine = document.querySelector('.progress-line');
+    let currentStep = 0;
+    
+    function updateProgressBar() {
+        const percent = (currentStep / (progressSteps.length - 1)) * 100;
+        progressLine.style.width = `${percent}%`;
+    }
+    
+    function updateSteps() {
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === currentStep);
+        });
+        
+        progressSteps.forEach((step, index) => {
+            step.classList.toggle('active', index === currentStep);
+            step.classList.toggle('completed', index < currentStep);
+        });
+        
+        updateProgressBar();
+    }
+    
+    // Next button click
+    document.querySelectorAll('.btn-next').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Validate current step
+            const currentStepElement = steps[currentStep];
+            const inputs = currentStepElement.querySelectorAll('input, select, textarea');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value) {
+                    isValid = false;
+                    input.classList.add('invalid');
+                    input.addEventListener('input', function() {
+                        this.classList.remove('invalid');
+                    }, { once: true });
+                }
+            });
+            
+            if (!isValid) return;
+            
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateSteps();
+            }
+        });
+    });
+    
+    // Previous button click
+    document.querySelectorAll('.btn-prev').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateSteps();
+            }
+        });
+    });
+    
+    // Initialize steps
+    updateSteps();
+
+    // Form submission
+    const orderForm = document.getElementById('orderForm');
+    const orderSuccess = document.getElementById('orderSuccess');
+
+    if (orderForm) {
+        orderForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate all required fields
+            const requiredInputs = orderForm.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredInputs.forEach(input => {
+                if (!input.value) {
+                    isValid = false;
+                    input.classList.add('invalid');
+                    input.addEventListener('input', function() {
+                        this.classList.remove('invalid');
+                    }, { once: true });
+                }
+            });
+            
+            if (!isValid) return;
+            
+            // Show loading indicator
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.className = 'loading-indicator';
+            loadingIndicator.innerHTML = `
+                <div class="spinner"></div>
+                <p>Submitting your order, please wait...</p>
+            `;
+            document.body.appendChild(loadingIndicator);
+            
+            try {
+                // Get form values
+                const driveUrl = document.getElementById('driveUrl').value;
+                const pageCount = parseInt(document.getElementById('pageCount').value);
+                const printType = document.getElementById('printType').value;
+                const district = document.getElementById('district').value;
+                const area = document.getElementById('area').value;
+                const address = document.getElementById('address').value;
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                const notes = document.getElementById('notes').value;
+                
+                // Calculate price
+                const pricePerPage = printType === 'black_white' ? 1.3 : 1.5;
+                const totalPrice = pricePerPage * pageCount;
+                
+                // Create order data object
+                const orderData = {
+                    driveUrl,
+                    pageCount,
+                    printType,
+                    district,
+                    area,
+                    address,
+                    name,
+                    phone,
+                    notes,
+                    status: 'new',
+                    totalPrice,
+                    orderDate: new Date().toISOString(),
+                    viewed: false // Flag to track if admin has viewed this order
+                };
+                
+                // Save order to Firebase
+                const docRef = await addDoc(collection(db, "orders"), {
+                    ...orderData,
+                    timestamp: serverTimestamp()
+                });
+                
+                console.log("Order submitted with ID: ", docRef.id);
+                
+                // Hide form and show success message
+                orderForm.style.display = 'none';
+                orderSuccess.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error submitting order:', error);
+                
+                // Show error message
+                alert('There was an error submitting your order. Please try again.');
+                
+            } finally {
+                // Remove loading indicator
+                if (document.body.contains(loadingIndicator)) {
+                    document.body.removeChild(loadingIndicator);
+                }
+            }
+        });
+    }
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+    }
+
+    // Scroll to top button
+    const scrollToTopBtn = document.querySelector('.scroll-to-top');
+    
+    if (scrollToTopBtn) {
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('active');
+            } else {
+                scrollToTopBtn.classList.remove('active');
+            }
+        });
+        
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+</script>
+
+</body>
+</html>
