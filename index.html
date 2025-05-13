@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +19,7 @@
                 <a href="index.html">
                     <h1>EasyCall<span>BD</span></h1>
                 </a>
-            </div>
+            </div> 
             <nav>
                 <ul class="nav-links">
                     <li><a href="index.html" class="active">Home</a></li>
@@ -29,7 +30,12 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
             </nav>
             <div class="cta-button">
@@ -37,6 +43,43 @@
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay"></div>
+    
+    <!-- Mobile Menu Container -->
+    <div class="mobile-menu-container">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <a href="index.html">
+                    <h1>EasyCall<span>BD</span></h1>
+                </a>
+            </div>
+            <button class="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <ul class="mobile-nav-links">
+            <li style="--item-index: 0;"><a href="index.html" class="active">Home</a></li>
+            <li style="--item-index: 1;"><a href="services.html">Services</a></li>
+            <li style="--item-index: 2;"><a href="portfolio.html">Portfolio</a></li>
+            <li style="--item-index: 3;"><a href="pricing.html">Pricing</a></li>
+            <li style="--item-index: 4;"><a href="about.html">About Us</a></li>
+            <li style="--item-index: 5;"><a href="contact.html">Contact</a></li>
+        </ul>
+        
+        <div class="mobile-cta">
+            <a href="order.html" class="btn btn-primary" style="width: 100%;">Order Now</a>
+        </div>
+        
+        <div class="mobile-social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </div>
 
     <section class="hero">
         <div class="container">
@@ -282,9 +325,123 @@
         <i class="fas fa-arrow-up"></i>
     </div>
 
-    <script src="js/main.js"></script>
-    <div class="admin-login-link" style="text-align: center; padding: 1rem 0; border-top: 1px solid var(--gray-200);">
-        <a href="admin/login.html" style="color: var(--text-light); font-size: 0.9rem;">Admin Login</a>
+    <div class="admin-login-link" style="text-align: center; padding: 1rem 0; border-top: 1px solid var(--border-color);">
+        <a href="admin/login.html" style="color: var(--text-secondary); font-size: 0.9rem;">Admin Login</a>
     </div>
+
+    <!-- Integrated JavaScript for Mobile Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Elements
+            const mobileMenuBtn = document.querySelector('.mobile-menu');
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenuContainer = document.querySelector('.mobile-menu-container');
+            const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+            const mobileMenuClose = document.querySelector('.mobile-menu-close');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
+            const body = document.body;
+
+            // Toggle Mobile Menu Function
+            function toggleMobileMenu() {
+                hamburger.classList.toggle('open');
+                mobileMenuContainer.classList.toggle('active');
+                mobileMenuOverlay.classList.toggle('active');
+                body.classList.toggle('no-scroll');
+            }
+
+            // Event Listeners
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            mobileMenuClose.addEventListener('click', toggleMobileMenu);
+            mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+
+            // Close menu when clicking on a link
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', toggleMobileMenu);
+            });
+
+            // Scroll to Top Button
+            const scrollToTopBtn = document.querySelector('.scroll-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.classList.add('show');
+                } else {
+                    scrollToTopBtn.classList.remove('show');
+                }
+            });
+            
+            scrollToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Header Scroll Effect
+            const header = document.querySelector('header');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Testimonial Slider
+            const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+            const testimonialDots = document.querySelectorAll('.dot');
+            const prevTestimonialBtn = document.querySelector('.prev-testimonial');
+            const nextTestimonialBtn = document.querySelector('.next-testimonial');
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                testimonialSlides.forEach(slide => slide.classList.remove('active'));
+                testimonialDots.forEach(dot => dot.classList.remove('active'));
+                
+                testimonialSlides[index].classList.add('active');
+                testimonialDots[index].classList.add('active');
+                currentSlide = index;
+            }
+
+            testimonialDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => showSlide(index));
+            });
+
+            prevTestimonialBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + testimonialSlides.length) % testimonialSlides.length;
+                showSlide(currentSlide);
+            });
+
+            nextTestimonialBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide + 1) % testimonialSlides.length;
+                showSlide(currentSlide);
+            });
+
+            // Auto slide testimonials
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % testimonialSlides.length;
+                showSlide(currentSlide);
+            }, 5000);
+
+            // Add no-scroll class to body when mobile menu is active
+            function setBodyScroll() {
+                if (mobileMenuContainer.classList.contains('active')) {
+                    body.style.overflow = 'hidden';
+                } else {
+                    body.style.overflow = '';
+                }
+            }
+
+            // Call the function when toggling the menu
+            mobileMenuBtn.addEventListener('click', setBodyScroll);
+            mobileMenuClose.addEventListener('click', setBodyScroll);
+            mobileMenuOverlay.addEventListener('click', setBodyScroll);
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', setBodyScroll);
+            });
+        });
+    </script>
 </body>
 </html>
+```
