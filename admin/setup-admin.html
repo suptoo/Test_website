@@ -1,199 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Setup - EasyCall BD</title>
-<link rel="stylesheet" href="../css/styles.css">
-<link rel="stylesheet" href="../css/additional-styles.css">
-<link rel="stylesheet" href="../css/firebase-integration.css">
-<style>
-    .setup-container {
-        max-width: 600px;
-        margin: 80px auto;
-        padding: 2rem;
-        background-color: var(--white);
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-    }
-    
-    .setup-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    
-    .setup-header h1 {
-        font-size: 1.8rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .setup-header p {
-        color: var(--text-light);
-    }
-    
-    .setup-content {
-        margin-bottom: 2rem;
-    }
-    
-    .setup-footer {
-        text-align: center;
-    }
-    
-    .message {
-        padding: 1rem;
-        border-radius: var(--border-radius);
-        margin-bottom: 1rem;
-    }
-    
-    .success {
-        background-color: var(--success-light);
-        color: var(--success-color);
-    }
-    
-    .error {
-        background-color: var(--error-light);
-        color: var(--error-color);
-    }
-    
-    .info {
-        background-color: var(--primary-light);
-        color: var(--white);
-    }
-    
-    .code-block {
-        background-color: var(--dark-bg);
-        color: var(--white);
-        padding: 1rem;
-        border-radius: var(--border-radius);
-        font-family: monospace;
-        margin-bottom: 1rem;
-        overflow-x: auto;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Setup Fix</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="setup-container">
-        <div class="setup-header">
-            <h1>Admin Setup</h1>
-            <p>One-time setup for admin authentication</p>
-        </div>
+    <div class="container">
+        <h1>Admin Setup Fix</h1>
+        <p>This tool will ensure that <strong>tuhad2003@gmail.com</strong> has admin privileges.</p>
         
-        <div class="setup-content">
-            <div class="message info">
-                <p>This page helps you set up the admin user in Firebase Authentication. You should only run this once, then delete or secure this page.</p>
-            </div>
-            
-            <div id="setupMessage"></div>
-            
-            <h3>Instructions:</h3>
-            <ol>
-                <li>Make sure you have enabled Email/Password authentication in your Firebase project.</li>
-                <li>Click the "Create Admin User" button below to create the admin user.</li>
-                <li>After successful creation, delete this file from your server.</li>
-            </ol>
-            
-            <div class="code-block">
-                <p>// Firebase Authentication Setup</p>
-                <p>Email: tuhad2003@gmail.com</p>
-                <p>Password: The End@</p>
-            </div>
-            
-            <button id="setupButton" class="btn btn-primary">Create Admin User</button>
-        </div>
+        <div id="result"></div>
         
-        <div class="setup-footer">
-            <a href="../index.html">Back to Website</a>
-        </div>
+        <button id="fixAdminBtn">Fix Admin Access</button>
     </div>
-</div>
 
-<!-- Firebase Scripts -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
 
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyDuY1EhiKneD7P-6wS7nDdcI1tai0iY_aM",
-        authDomain: "easycall-bd.firebaseapp.com",
-        projectId: "easycall-bd",
-        storageBucket: "easycall-bd.appspot.com",
-        messagingSenderId: "118716206171",
-        appId: "1:118716206171:web:ff4415627abf6ca2e8837e",
-        measurementId: "G-MP1LWS3WJY"
-    };
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuY1EhiKneD7P-6wS7nDdcI1tai0iY_aM",
+            authDomain: "easycall-bd.firebaseapp.com",
+            projectId: "easycall-bd",
+            storageBucket: "easycall-bd.firebasestorage.app",
+            messagingSenderId: "118716206171",
+            appId: "1:118716206171:web:ff4415627abf6ca2e8837e",
+            measurementId: "G-MP1LWS3WJY"
+        };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    
-    // Setup button click handler
-    const setupButton = document.getElementById('setupButton');
-    const setupMessage = document.getElementById('setupMessage');
-    
-    setupButton.addEventListener('click', async () => {
-        try {
-            // Show loading indicator
-            const loadingIndicator = document.createElement('div');
-            loadingIndicator.className = 'loading-indicator';
-            loadingIndicator.innerHTML = `
-                <div class="spinner"></div>
-                <p>Setting up admin user...</p>
-            `;
-            document.body.appendChild(loadingIndicator);
-            
-            // Create admin user
-            const userCredential = await createUserWithEmailAndPassword(auth, "tuhad2003@gmail.com", "The End@");
-            const user = userCredential.user;
-            
-            // Add admin role to user in Firestore
-            await setDoc(doc(db, "users", user.uid), {
-                email: user.email,
-                role: "admin",
-                createdAt: new Date()
-            });
-            
-            // Sign out the user
-            await signOut(auth);
-            
-            // Show success message
-            setupMessage.innerHTML = `
-                <div class="message success">
-                    <p>Admin user created successfully!</p>
-                    <p>You can now log in with the admin credentials.</p>
-                    <p><strong>Important:</strong> Delete this file from your server for security.</p>
-                </div>
-            `;
-            
-            // Disable the setup button
-            setupButton.disabled = true;
-        } catch (error) {
-            console.error("Error creating admin user:", error);
-            
-            // Show error message
-            let errorMessage = "An error occurred while creating the admin user.";
-            
-            if (error.code === "auth/email-already-in-use") {
-                errorMessage = "The admin user already exists. You can log in with the admin credentials.";
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Admin email
+        const adminEmail = "tuhad2003@gmail.com";
+
+        document.getElementById('fixAdminBtn').addEventListener('click', async () => {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Working on it...</p>';
+            resultDiv.className = '';
+
+            try {
+                // Try to sign in as admin
+                try {
+                    await signInWithEmailAndPassword(auth, adminEmail, "The End@");
+                    console.log("Admin login successful");
+                } catch (loginError) {
+                    resultDiv.innerHTML = `
+                        <p>Could not log in as admin: ${loginError.message}</p>
+                        <p>Please make sure the admin account exists and the password is correct.</p>
+                    `;
+                    resultDiv.className = 'result error';
+                    return;
+                }
+
+                // Get the current user
+                const user = auth.currentUser;
+                if (!user) {
+                    throw new Error("No user is signed in");
+                }
+
+                // Check if user document exists
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    // Update the existing document to ensure admin role
+                    await setDoc(userDocRef, {
+                        email: user.email,
+                        role: "admin",
+                        updatedAt: new Date(),
+                        ...userDoc.data(), // Keep existing data
+                        role: "admin" // Ensure role is admin (overwrite)
+                    });
+                    
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ Admin user updated successfully!</p>
+                        <pre>${JSON.stringify({uid: user.uid, email: user.email, role: "admin"}, null, 2)}</pre>
+                        <p>The user now has admin privileges.</p>
+                        <p>You can now <a href="admin-dashboard.html">go to the admin dashboard</a>.</p>
+                    `;
+                } else {
+                    // Create new user document with admin role
+                    await setDoc(userDocRef, {
+                        email: user.email,
+                        role: "admin",
+                        createdAt: new Date()
+                    });
+                    
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ Admin user created successfully!</p>
+                        <pre>${JSON.stringify({uid: user.uid, email: user.email, role: "admin"}, null, 2)}</pre>
+                        <p>The user now has admin privileges.</p>
+                        <p>You can now <a href="admin-dashboard.html">go to the admin dashboard</a>.</p>
+                    `;
+                }
+                
+                resultDiv.className = 'result success';
+                
+            } catch (error) {
+                console.error("Error fixing admin:", error);
+                resultDiv.innerHTML = `
+                    <p>Error fixing admin: ${error.message}</p>
+                    <p>Please check the console for more details.</p>
+                `;
+                resultDiv.className = 'result error';
             }
-            
-            setupMessage.innerHTML = `
-                <div class="message error">
-                    <p>${errorMessage}</p>
-                    <p>Error code: ${error.code}</p>
-                </div>
-            `;
-        } finally {
-            // Remove loading indicator
-            const loadingIndicator = document.querySelector('.loading-indicator');
-            if (loadingIndicator) {
-                document.body.removeChild(loadingIndicator);
-            }
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 </html>
