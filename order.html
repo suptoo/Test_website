@@ -60,6 +60,7 @@
     .nav-links {
         display: flex;
         list-style: none;
+        align-items: center;
     }
     
     .nav-links li {
@@ -76,6 +77,65 @@
     
     .nav-links a:hover {
         color: #b4e04b;
+    }
+    
+    .user-menu {
+        position: relative;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #b4e04b;
+        color: #1a1d21;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .user-avatar:hover {
+        background-color: #9bc740;
+    }
+    
+    .user-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #13151a;
+        border: 1px solid #2c2f36;
+        border-radius: 8px;
+        padding: 10px 0;
+        min-width: 200px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        display: none;
+        z-index: 1000;
+    }
+    
+    .user-dropdown.active {
+        display: block;
+    }
+    
+    .user-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        color: #ffffff;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+    
+    .user-dropdown a:hover {
+        background-color: #2c2f36;
+    }
+    
+    .user-dropdown a i {
+        color: #b4e04b;
+        width: 16px;
     }
     
     .mobile-menu {
@@ -616,10 +676,25 @@
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html">Services</a></li>
-                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="import.html">Import</a></li>
                 <li><a href="pricing.html">Pricing</a></li>
                 <li><a href="about.html">About Us</a></li>
                 <li><a href="contact.html">Contact</a></li>
+                <li class="user-menu">
+                    <div class="user-avatar" id="userAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </li>
             </ul>
             <div class="mobile-menu">
                 <i class="fas fa-bars"></i>
@@ -748,7 +823,7 @@
         <h2>Order Placed Successfully!</h2>
         <p>Thank you for your order. We will contact you shortly to confirm the details.</p>
         <p>Your order has been sent to our system and our team will process it soon.</p>
-        <a href="index.html" class="btn-home">Back to Home</a>
+        <a href="dashboard.html" class="btn-home">Back to Dashboard</a>
     </div>
 </div>
 
@@ -818,7 +893,19 @@
 <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+    import { 
+        getAuth, 
+        onAuthStateChanged,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+    import { 
+        getFirestore, 
+        collection, 
+        addDoc, 
+        serverTimestamp,
+        doc,
+        getDoc
+    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
 
     // Your web app's Firebase configuration
@@ -834,8 +921,64 @@
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
     const analytics = getAnalytics(app);
+
+    // Make functions global
+    window.auth = auth;
+    window.db = db;
+    window.signOut = signOut;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.serverTimestamp = serverTimestamp;
+    window.doc = doc;
+    window.getDoc = getDoc;
+
+    let currentUser = null;
+
+    // Check authentication state
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // User is signed in
+            currentUser = user;
+            
+            // Set user avatar
+            const userAvatar = document.getElementById('userAvatar');
+            if (user.displayName) {
+                userAvatar.textContent = user.displayName.charAt(0).toUpperCase();
+            } else {
+                userAvatar.innerHTML = '<i class="fas fa-user"></i>';
+            }
+            
+            // Pre-fill user data if available
+            await prefillUserData(user);
+            
+        } else {
+            // User is not signed in, redirect to auth page
+            window.location.href = 'auth.html';
+        }
+    });
+
+    // Pre-fill user data from Firestore
+    async function prefillUserData(user) {
+        try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                
+                // Pre-fill name and phone if available
+                if (userData.name) {
+                    document.getElementById('name').value = userData.name;
+                }
+                if (userData.phone) {
+                    document.getElementById('phone').value = userData.phone;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading user data:', error);
+        }
+    }
 
     // Areas by district
     const areasByDistrict = {
@@ -970,6 +1113,12 @@
         orderForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            if (!currentUser) {
+                alert('Please log in to place an order.');
+                window.location.href = 'auth.html';
+                return;
+            }
+            
             // Validate all required fields
             const requiredInputs = orderForm.querySelectorAll('[required]');
             let isValid = true;
@@ -1013,6 +1162,8 @@
                 
                 // Create order data object
                 const orderData = {
+                    userId: currentUser.uid,
+                    userEmail: currentUser.email,
                     driveUrl,
                     pageCount,
                     printType,
@@ -1054,6 +1205,29 @@
             }
         });
     }
+</script>
+
+<script>
+    // User dropdown toggle
+    document.getElementById('userAvatar').addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.getElementById('userDropdown').classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function() {
+        document.getElementById('userDropdown').classList.remove('active');
+    });
+
+    // Logout function
+    async function logout() {
+        try {
+            await window.signOut(window.auth);
+            window.location.href = 'auth.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    }
 
     // Mobile menu toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu');
@@ -1085,6 +1259,9 @@
             });
         });
     }
+
+    // Make logout function global
+    window.logout = logout;
 </script>
 
 </body>
