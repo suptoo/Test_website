@@ -1315,3 +1315,15 @@
   .pulse {
     animation: pulse 2s infinite;
   }
+  .btn-whatsapp {
+    background: #25D366;
+    color: #fff;
+    margin-left: 10px;
+}
+.btn-whatsapp:hover {
+    background: #1DA851;
+}
+  .btn-whatsapp i {
+    margin-right: 5px;
+}
+/* ===== END OF CSS ===== */
