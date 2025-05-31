@@ -424,7 +424,7 @@ footer {
     width: 40px;
     height: 40px;
     background-color: var(--border-color);
-    color: var(--light-text);
+    color: var (--light-text);
     border-radius: 50%;
     transition: all 0.3s;
 }
@@ -667,7 +667,7 @@ footer {
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html">Services</a></li>
-                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="import.html">Import Product</a></li>
                 <li><a href="pricing.html">Pricing</a></li>
                 <li><a href="about.html">About Us</a></li>
                 <li><a href="contact.html" class="active">Contact</a></li>
@@ -699,7 +699,7 @@ footer {
                     <i class="fas fa-phone"></i>
                 </div>
                 <h3>Call Us</h3>
-                <p>Main: +880 1586-033732<br>Main:+880 1315-279091</p>
+                <p>Main: +880 1586-033732<br>01759038754</p>
             </div>
             
             <div class="contact-info-card">
@@ -727,8 +727,8 @@ footer {
         <div class="contact-form-container">
             <div class="contact-form-content">
                 <div class="section-header">
-                    <h2>Import product from China</h2>
-                    <p>Fill out the form below for import product from China.</p>
+                    <h2>Contact Us</h2>
+                    <p>Contact us for any services.</p>
                 </div>
                 
                 <div id="formFeedback" class="form-feedback"></div>
@@ -739,60 +739,34 @@ footer {
                     action="https://formspree.io/f/xkgrzrrp"
                     method="POST"
                 >
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="first-name">First Name*</label>
-                            <input type="text" id="first-name" name="first-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="last-name">Last Name*</label>
-                            <input type="text" id="last-name" name="last-name" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email Address*</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                    </div>
-                    
                     <div class="form-group">
-                        <label for="company">Company Name</label>
-                        <input type="text" id="company" name="company">
+                        <label for="name">Name*</label>
+                        <input type="text" id="name" name="name" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="subject">Subject*</label>
-                        <input type="text" id="subject" name="subject" required>
+                        <label for="email">Email*</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="message">Message*</label>
-                        <textarea id="message" name="message" rows="6" required></textarea>
+                        <label for="mobile">Mobile*</label>
+                        <input type="tel" id="mobile" name="mobile" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="inquiry-type">Import Product*</label>
-                        <select id="inquiry-type" name="inquiry-type" required>
-                            <option value="">Select Import Product Type</option>
-                            <option value="gadget">Gadget</option>
-                            <option value="robotics">Robotics</option>
-                            <option value="other">Other</option>
+                        <label for="service">Contact for which service*</label>
+                        <select id="service" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="book-print">Book Print</option>
+                            <option value="documents-print">Documents Print</option>
+                            <option value="lecture-slide-print">Lecture Slide Print</option>
+                            <option value="photo-print">Photo Print</option>
+                            <option value="certificate-print">Certificate Print</option>
+                            <option value="prescription-print">Prescription Print</option>
                         </select>
                     </div>
-                    
-                    <div class="form-group checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="newsletter" name="newsletter" value="yes">
-                            <label for="newsletter">Subscribe to our newsletter for printing tips and special offers</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="message">Comment or Advice</label>
+                        <textarea id="message" name="message" rows="4"></textarea>
                     </div>
-                    
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Send Message</button>
                     </div>
