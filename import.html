@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Import Quote – EasyCall BD</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        background: #f0f4f8;
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+    .form-container {
+        max-width: 600px;
+        margin: 80px auto;
+        background: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #1e90ff;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccd0d5;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #1e90ff;
+    }
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #1e90ff;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .btn-submit:hover {
+        background: #187bcd;
+    }
+</style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <a href="index.html">
+                <h1>EasyCall<span>BD</span></h1>
+            </a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="import.html" class="active">Import Products</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+        <div class="cta-button">
+            <a href="order.html" class="btn btn-primary">Order Now</a>
+        </div>
+    </div>
+</header>
+
+<section class="page-banner">
+    <div class="container">
+        <h1>Import Products from China</h1>
+        <p>High-quality sourcing of Robotics, Electronics, Machinery & more</p>
+    </div>
+</section>
+
+<section class="contact-form-section">
+    <div class="container">
+        <div class="contact-form-container">
+            <div class="section-header">
+                <h2 style="color:#b4e04b;">Request a Quote</h2>
+                <p style="color:#adb5bd;">Tell us what you need—we’ll handle sourcing & logistics</p>
+            </div>
+            <form
+                id="importForm"
+                class="contact-form"
+                action="https://formspree.io/f/xkgrzrrp"
+                method="POST"
+                style="background:#13151a; padding:40px; border-radius:8px;"
+            >
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name" style="color:#fff;">Name*</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" style="color:#fff;">Email*</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mobile" style="color:#fff;">Mobile*</label>
+                        <input type="tel" id="mobile" name="mobile" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service" style="color:#fff;">Service*</label>
+                        <select id="service" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="robotics">Robotics</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="machinery">Machinery</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="furniture">Furniture</option>
+                            <option value="accessories">Accessories</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="quantity" style="color:#fff;">Quantity (approx.)</label>
+                    <input type="number" id="quantity" name="quantity" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="incoterms" style="color:#fff;">Delivery Location</label>
+                    <input type="text" id="incoterms" name="incoterms">
+                </div>
+                <div class="form-group">
+                    <label for="message" style="color:#fff;">Details / Advice</label>
+                    <textarea id="message" name="message" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Start Your Printing Project?</h2>
+            <p>Let us help you bring your vision to life with our professional printing services.</p>
+            <a href="contact.html" class="btn btn-light">Contact Us</a>
+            <a href="order.html" class="btn btn-primary">Order Now</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <div class="footer-logo">
+                    <h2>EasyCall<span>BD</span></h2>
+                </div>
+                <p>Professional printing services for businesses and individuals. Quality, reliability, and customer satisfaction guaranteed.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="import.html">Import Product</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Services</h3>
+                <ul class="footer-links">
+                    <li><a href="services.html#business-documents">Business Documents</a></li>
+                    <li><a href="services.html#marketing-materials">Marketing Materials</a></li>
+                    <li><a href="services.html#books-catalogs">Books & Catalogs</a></li>
+                    <li><a href="services.html#custom-merchandise">Custom Merchandise</a></li>
+                    <li><a href="services.html#large-format">Large Format Printing</a></li>
+                    <li><a href="services.html#design-services">Design Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Nilkhet,Dhaka</li>
+                    <li><i class="fas fa-phone"></i> 01586033732</li>
+                    <li><i class="fas fa-envelope"></i> easycallbd2025@gmail.com</li>
+                    <li><i class="fas fa-clock"></i> Sat-Fri</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EasyCall BD. All Rights Reserved.</p>
+            <ul class="footer-bottom-links">
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<div class="scroll-to-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
